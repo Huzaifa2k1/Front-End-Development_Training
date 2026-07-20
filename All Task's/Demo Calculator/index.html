@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Elite Dashboard Calculator</title>
+    <style>
+        /* --- DYNAMIC THEME ENGINE --- */
+        :root, [data-theme="midnight"] {
+            --bg-gradient: linear-gradient(135deg, #0f1013 0%, #1a1c23 100%);
+            --panel-bg: #15161a;
+            --screen-bg: #090a0c;
+            --text-main: #ffffff;
+            --text-muted: #5c606b;
+            --btn-num: #1e2129;
+            --btn-num-hover: #292e3a;
+            --btn-op: #282d3d;
+            --btn-op-text: #60a5fa;
+            --btn-sci: #202430;
+            --btn-sci-text: #34d399;
+            --btn-action: #2e2626;
+            --btn-action-text: #f87171;
+            --btn-accent: #2563eb;
+            --shadow-neo: 5px 5px 20px rgba(0, 0, 0, 0.5);
+            --border-ui: rgba(255, 255, 255, 0.03);
+        }
+
+        [data-theme="light"] {
+            --bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            --panel-bg: #ffffff;
+            --screen-bg: #f9fafb;
+            --text-main: #1f2937;
+            --text-muted: #9ca3af;
+            --btn-num: #f3f4f6;
+            --btn-num-hover: #e5e7eb;
+            --btn-op: #eff6ff;
+            --btn-op-text: #2563eb;
+            --btn-sci: #ecfdf5;
+            --btn-sci-text: #059669;
+            --btn-action: #fef2f2;
+            --btn-action-text: #dc2626;
+            --btn-accent: #2563eb;
+            --shadow-neo: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --border-ui: rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="cyberpunk"] {
+            --bg-gradient: linear-gradient(135deg, #0c0813 0%, #170d26 100%);
+            --panel-bg: #120924;
+            --screen-bg: #05020a;
+            --text-main: #00ffcc;
+            --text-muted: #7952b3;
+            --btn-num: #1a0f33;
+            --btn-num-hover: #26174d;
+            --btn-op: #22093a;
+            --btn-op-text: #ff007f;
+            --btn-sci: #0a2233;
+            --btn-sci-text: #00ffcc;
+            --btn-action: #33001a;
+            --btn-action-text: #ff3333;
+            --btn-accent: #ff007f;
+            --shadow-neo: 0 0 20px rgba(255, 0, 127, 0.2);
+            --border-ui: #ff007f33;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+            padding: 24px;
+        }
+
+        /* --- DASHBOARD WRAPPER --- */
+        .dashboard {
+            display: flex;
+            gap: 24px;
+            max-width: 960px;
+            width: 100%;
+            background: var(--panel-bg);
+            padding: 28px;
+            border-radius: 32px;
+            box-shadow: var(--shadow-neo);
+            border: 1px solid var(--border-ui);
+        }
+
+        .calc-section {
+            flex: 1.1;
+        }
+
+        .side-section {
+            flex: 0.9;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border-ui);
+            padding-left: 24px;
+        }
+
+        /* --- CONTROL CONTROLLERS --- */
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Mode Toggle Slider */
+        .toggle-container {
+            display: flex;
+            background: var(--screen-bg);
+            padding: 4px;
+            border-radius: 50px;
+            border: 1px solid var(--border-ui);
+        }
+
+        .toggle-btn {
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .toggle-btn.active {
+            background: var(--btn-accent);
+            color: #ffffff;
+        }
+
+        /* Theme Select Dropdown */
+        .theme-select {
+            background: var(--screen-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-ui);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* --- CALCULATOR ENGINE UI --- */
+        .screen {
+            background: var(--screen-bg);
+            padding: 20px;
+            border-radius: 18px;
+            text-align: right;
+            margin-bottom: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            border: 1px solid var(--border-ui);
+        }
+
+        .expression {
+            font-size: 1rem;
+            color: var(--text-muted);
+            min-height: 20px;
+        }
+
+        .display-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .copy-btn:hover { color: var(--text-main); background: var(--btn-num); }
+
+        .display {
+            font-size: 2.5rem;
+            font-weight: 600;
+            overflow-x: auto;
+            white-space: nowrap;
+            width: 100%;
+            text-align: right;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: var(--btn-accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Keypad Layout Structure */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .keypad.scientific-mode {
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        button.calc-key {
+            border: none;
+            height: 54px;
+            border-radius: 12px;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            user-select: none;
+        }
+        button.calc-key:active { transform: scale(0.95); }
+
+        .num-btn { background: var(--btn-num); }
+        .num-btn:hover { background: var(--btn-num-hover); }
+        .op-btn { background: var(--btn-op); color: var(--btn-op-text); font-size: 1.3rem;}
+        .sci-btn { background: var(--btn-sci); color: var(--btn-sci-text); font-size: 1rem; }
+        .action-btn { background: var(--btn-action); color: var(--btn-action-text); }
+        .equal-btn { background: var(--btn-accent); color: white !important; grid-column: span 1; }
+        .keypad.scientific-mode .equal-btn { grid-column: span 2; }
+
+        /* Hide elements dynamically */
+        .sci-btn.hidden { display: none; }
+
+        /* --- SIDE DASHBOARD TABS --- */
+        .tab-headers {
+            display: flex;
+            background: var(--screen-bg);
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            border-radius: 8px;
+        }
+        .tab-btn.active {
+            background: var(--panel-bg);
+            color: var(--text-main);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .tab-content { display: none; flex: 1; flex-direction: column; }
+        .tab-content.active { display: flex; }
+
+        /* Converter UI Layout */
+        .converter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        select.ui-select, input.ui-input {
+            background: var(--screen-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-ui);
+            padding: 10px;
+            border-radius: 8px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        /* Canvas Graph Layout */
+        .graph-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        canvas {
+            background: var(--screen-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-ui);
+            width: 100%;
+            max-height: 220px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <!-- LEFT PANEL: THE CALCULATOR MODULE -->
+        <div class="calc-section">
+            <div class="top-controls">
+                <!-- Mode Controller -->
+                <div class="toggle-container">
+                    <div class="toggle-btn active" id="mode-basic" onclick="setMode('basic')">Basic</div>
+                    <div class="toggle-btn" id="mode-sci" onclick="setMode('scientific')">Scientific</div>
+                </div>
+                <!-- Theme Switcher Engine -->
+                <select class="theme-select" onchange="changeTheme(this.value)">
+                    <option value="midnight">🌙 Midnight</option>
+                    <option value="light">☀️ Minimal Light</option>
+                    <option value="cyberpunk">⚡ Cyberpunk Neon</option>
+                </select>
+            </div>
+
+            <!-- Screen UI Elements -->
+            <div class="screen">
+                <div class="toast" id="toast-msg">Copied!</div>
+                <div class="expression" id="expression-preview"></div>
+                <div class="display-row">
+                    <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+                    <div class="display" id="display-main">0</div>
+                </div>
+            </div>
+
+            <!-- Keypad Layout Grid -->
+            <div class="keypad" id="calc-keypad">
+                <!-- Scientific buttons (will toggle hidden state) -->
+                <button class="calc-key sci-btn hidden" onclick="executeScientific('sin')">sin</button>
+                <button class="calc-key sci-btn hidden" onclick="executeScientific('cos')">cos</button>
+                <button class="calc-key sci-btn hidden" onclick="executeScientific('tan')">tan</button>
+                <button class="calc-key sci-btn hidden" onclick="executeScientific('log')">log</button>
+                <button class="calc-key sci-btn hidden" onclick="executeScientific('sqrt')">√x</button>
+
+                <!-- Standard Row 1 -->
+                <button class="calc-key action-btn" onclick="clearAll()">AC</button>
+                <button class="calc-key action-btn" onclick="deleteLast()">DEL</button>
+                <button class="calc-key op-btn" onclick="appendOperator('/')">÷</button>
+                <button class="calc-key op-btn" onclick="appendOperator('*')">×</button>
+
+                <!-- Standard Row 2 -->
+                <button class="calc-key num-btn" onclick="appendNumber('7')">7</button>
+                <button class="calc-key num-btn" onclick="appendNumber('8')">8</button>
+                <button class="calc-key num-btn" onclick="appendNumber('9')">9</button>
+                <button class="calc-key op-btn" onclick="appendOperator('-')">−</button>
+
+                <!-- Standard Row 3 -->
+                <button class="calc-key num-btn" onclick="appendNumber('4')">4</button>
+                <button class="calc-key num-btn" onclick="appendNumber('5')">5</button>
+                <button class="calc-key num-btn" onclick="appendNumber('6')">6</button>
+                <button class="calc-key op-btn" onclick="appendOperator('+')">+</button>
+
+                <!-- Standard Row 4 -->
+                <button class="calc-key num-btn" onclick="appendNumber('1')">1</button>
+                <button class="calc-key num-btn" onclick="appendNumber('2')">2</button>
+                <button class="calc-key num-btn" onclick="appendNumber('3')">3</button>
+                <button class="calc-key num-btn" onclick="appendNumber('.')">.</button>
+
+                <!-- Standard Row 5 -->
+                <button class="calc-key num-btn" onclick="appendNumber('0')">0</button>
+                <button class="calc-key equal-btn" id="eq-btn" onclick="calculate()">=</button>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: CONVERTER & GRAPH EXTRAVAGANZA -->
+        <div class="side-section">
+            <div class="tab-headers">
+                <div class="tab-btn active" id="tab-conv" onclick="switchTab('converter')">🔄 Converter</div>
+                <div class="tab-btn" id="tab-graph" onclick="switchTab('graph')">📊 Visual Graph</div>
+            </div>
+
+            <!-- Tab 1: Converter System -->
+            <div class="tab-content active" id="content-converter">
+                <div class="converter-group">
+                    <label style="font-size:0.85rem; color:var(--text-muted)">Select Conversion Module</label>
+                    <select class="ui-select" id="conv-type" onchange="initConverterOptions()">
+                        <option value="length">Length (m ↔ ft)</option>
+                        <option value="temp">Temperature (°C ↔ °F)</option>
+                        <option value="data">Data Size (MB ↔ GB)</option>
+                    </select>
+                    <input type="number" class="ui-input" id="conv-input" value="1" oninput="runConversion()">
+                    <select class="ui-select" id="conv-unit-setup" onchange="runConversion()"></select>
+                    <div style="font-size: 1.3rem; margin-top: 10px; font-weight: 600; color:var(--btn-sci-text)" id="conv-result">Result will show here</div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Graph Plotter System -->
+            <div class="tab-content" id="content-graph">
+                <div class="graph-wrapper">
+                    <select class="ui-select" id="graph-func" onchange="drawGraph()" style="width: 100%;">
+                        <option value="x*x">f(x) = x² (Parabola)</option>
+                        <option value="Math.sin">f(x) = sin(x) (Wave)</option>
+                        <option value="Math.cos">f(x) = cos(x)</option>
+                        <option value="Math.abs">f(x) = |x| (Absolute)</option>
+                    </select>
+                    <canvas id="graphCanvas" width="300" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- BASE STATE SYSTEM ---
+        const displayMain = document.getElementById('display-main');
+        const expressionPreview = document.getElementById('expression-preview');
+        const keypad = document.getElementById('calc-keypad');
+        const eqBtn = document.getElementById('eq-btn');
+
+        let currentInput = '0';
+        let previousInput = '';
+        let operation = null;
+        let resetDisplayOnNextInput = false;
+
+        // --- HAPTIC CLICK SOUND SYNTHESIZER ---
+        // Generates an inline clean click sound using the Web Audio API without requiring any external MP3 file.
+        function playClickSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime); // Quick high-frequency burst
+                gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Low non-disturbing volume
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.04);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.04);
+            } catch (e) { console.log("Audio Context initialization deferred."); }
+        }
+
+        // --- THEME SWITCH ENGINE ---
+        function changeTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            drawGraph(); // Redraw graph to match theme color schema grid lines
+        }
+
+        // --- MODE TOGGLE SYSTEM ---
+        function setMode(mode) {
+            playClickSound();
+            const sciButtons = document.querySelectorAll('.sci-btn');
+            if (mode === 'scientific') {
+                document.getElementById('mode-sci').classList.add('active');
+                document.getElementById('mode-basic').classList.remove('active');
+                keypad.classList.add('scientific-mode');
+                sciButtons.forEach(btn => btn.classList.remove('hidden'));
+            } else {
+                document.getElementById('mode-basic').classList.add('active');
+                document.getElementById('mode-sci').classList.remove('active');
+                keypad.classList.remove('scientific-mode');
+                sciButtons.forEach(btn => btn.classList.add('hidden'));
+            }
+        }
+
+        // --- CALCULATOR OPERATIONS CORE ENGINE ---
+        function appendNumber(num) {
+            playClickSound();
+            if (resetDisplayOnNextInput) { currentInput = ''; resetDisplayOnNextInput = false; }
+            if (num === '.' && currentInput.includes('.')) return;
+            if (currentInput === '0' && num !== '.') currentInput = num;
+            else currentInput += num;
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            playClickSound();
+            if (operation !== null && !resetDisplayOnNextInput) calculate(true);
+            previousInput = currentInput;
+            operation = op;
+            resetDisplayOnNextInput = true;
+            updatePreview(op);
+        }
+
+        function calculate(isIntermediate = false) {
+            playClickSound();
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operation) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': 
+                    if (current === 0) { displayMain.innerText = "Error: Div by 0"; return; }
+                    result = prev / current; 
+                    break;
+                default: return;
+            }
+
+            currentInput = parseFloat(result.toFixed(8)).toString();
+            if (!isIntermediate) {
+                expressionPreview.innerText = '';
+                operation = null;
+                previousInput = '';
+                resetDisplayOnNextInput = true;
+            } else { previousInput = currentInput; }
+            updateDisplay();
+        }
+
+        function executeScientific(func) {
+            playClickSound();
+            let val = parseFloat(currentInput);
+            if (isNaN(val)) return;
+            let result;
+
+            if (func === 'sin') result = Math.sin(val * Math.PI / 180);
+            else if (func === 'cos') result = Math.cos(val * Math.PI / 180);
+            else if (func === 'tan') result = Math.tan(val * Math.PI / 180);
+            else if (func === 'log') result = val > 0 ? Math.log10(val) : NaN;
+            else if (func === 'sqrt') result = val >= 0 ? Math.sqrt(val) : NaN;
+
+            if (isNaN(result)) { displayMain.innerText = "Invalid Input"; return; }
+            expressionPreview.innerText = `${func}(${val})`;
+            currentInput = parseFloat(result.toFixed(8)).toString();
+            resetDisplayOnNextInput = true;
+            updateDisplay();
+        }
+
+        function updateDisplay() { displayMain.innerText = currentInput; }
+        function updatePreview(op) { expressionPreview.innerText = `${previousInput} ${op}`; }
+        function clearAll() { playClickSound(); currentInput = '0'; previousInput = ''; operation = null; expressionPreview.innerText = ''; updateDisplay(); }
+        function deleteLast() { playClickSound(); currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : '0'; updateDisplay(); }
+
+        // --- MICRO-INTERACTION: COPY TO CLIPBOARD ---
+        function copyToClipboard() {
+            navigator.clipboard.writeText(displayMain.innerText);
+            const toast = document.getElementById('toast-msg');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // --- DASHBOARD SIDEBAR TAB MANAGER ---
+        function switchTab(tabName) {
+            playClickSound();
+            if (tabName === 'converter') {
+                document.getElementById('tab-conv').classList.add('active');
+                document.getElementById('tab-graph').classList.remove('active');
+                document.getElementById('content-converter').classList.add('active');
+                document.getElementById('content-graph').classList.remove('active');
+            } else {
+                document.getElementById('tab-graph').classList.add('active');
+                document.getElementById('tab-conv').classList.remove('active');
+                document.getElementById('content-graph').classList.add('active');
+                document.getElementById('content-converter').classList.remove('active');
+                drawGraph(); // Refreshes grid metrics mapping canvas size setup
+            }
+        }
+
+        // --- CONVERTER ALGORITHMS ---
+        const convSetups = {
+            length: [ {lbl: "Meters to Feet", formula: v => v * 3.28084, suff: "ft"}, {lbl: "Feet to Meters", formula: v => v / 3.28084, suff: "m"} ],
+            temp: [ {lbl: "Celsius to Fahrenheit", formula: v => (v * 9/5) + 32, suff: "°F"}, {lbl: "Fahrenheit to Celsius", formula: v => (v - 32) * 5/9, suff: "°C"} ],
+            data: [ {lbl: "MB to GB", formula: v => v / 1024, suff: "GB"}, {lbl: "GB to MB", formula: v => v * 1024, suff: "MB"} ]
+        };
+
+        function initConverterOptions() {
+            const type = document.getElementById('conv-type').value;
+            const setupSelect = document.getElementById('conv-unit-setup');
+            setupSelect.innerHTML = '';
+            convSetups[type].forEach((opt, idx) => {
+                setupSelect.innerHTML += `<option value="${idx}">${opt.lbl}</option>`;
+            });
+            runConversion();
+        }
+
+        function runConversion() {
+            const type = document.getElementById('conv-type').value;
+            const idx = document.getElementById('conv-unit-setup').value;
+            const inputVal = parseFloat(document.getElementById('conv-input').value);
+            if (isNaN(inputVal) || !convSetups[type][idx]) { document.getElementById('conv-result').innerText = "--"; return; }
+            const activeRule = convSetups[type][idx];
+            document.getElementById('conv-result').innerText = `${parseFloat(activeRule.formula(inputVal).toFixed(4))} ${activeRule.suff}`;
+        }
+
+        // --- LIVE MATHEMATICAL GRAPH VISUALIZER ---
+        function drawGraph() {
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dynamically detect current theme colors to match grid stroke architecture
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            let axisColor = '#5c606b';
+            let curveColor = '#2563eb';
+            if (currentTheme === 'cyberpunk') { axisColor = '#7952b3'; curveColor = '#ff007f'; }
+            else if (currentTheme === 'light') { axisColor = '#9ca3af'; curveColor = '#2563eb'; }
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = 20; // 20 pixels equals 1 unit grid space
+
+            // Draw Cartesian X & Y Axes Lines
+            ctx.strokeStyle = axisColor;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY); ctx.lineTo(width, centerY);
+            ctx.moveTo(centerX, 0); ctx.lineTo(centerX, height);
+            ctx.stroke();
+
+            // Render Mathematical curves natively
+            const funcType = document.getElementById('graph-func').value;
+            ctx.strokeStyle = curveColor;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+
+            let firstPoint = true;
+            for (let pixelX = 0; pixelX < width; pixelX++) {
+                // Convert screen pixel position coordinate space back to standard algebra numbers
+                let mathX = (pixelX - centerX) / scale;
+                let mathY;
+
+                if (funcType === 'x*x') mathY = mathX * mathX;
+                else if (funcType === 'Math.sin') mathY = Math.sin(mathX);
+                else if (funcType === 'Math.cos') mathY = Math.cos(mathX);
+                else if (funcType === 'Math.abs') mathY = Math.abs(mathX);
+
+                // Convert mathematical output back to screen pixels coordinates mapping canvas standard
+                let pixelY = centerY - (mathY * scale);
+
+                if (firstPoint) { ctx.moveTo(pixelX, pixelY); firstPoint = false; }
+                else { ctx.lineTo(pixelX, pixelY); }
+            }
+            ctx.stroke();
+        }
+
+        // Initialize defaults
+        initConverterOptions();
+        window.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9' || e.key === '.') appendNumber(e.key);
+            else if (['+', '-', '*', '/'].includes(e.key)) appendOperator(e.key);
+            else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); }
+            else if (e.key === 'Backspace') deleteLast();
+            else if (e.key === 'Escape') clearAll();
+        });
+    </script>
+</body>
+</html>
