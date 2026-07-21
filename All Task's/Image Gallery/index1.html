@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexus Canvas Studio Pro | Enterprise Gallery & Suite</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ==========================================
+       1. ADVANCED DESIGN SYSTEM & MESH STYLING
+       ========================================== */
+    :root {
+      --bg-main: #05070f;
+      --bg-surface: rgba(13, 18, 30, 0.75);
+      --border-light: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.5);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --accent: #06b6d4;
+      --pink-accent: #ec4899;
+      --glass-panel: rgba(10, 14, 26, 0.92);
+      
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --shadow-pro: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-main);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1440px; margin: 0 auto; }
+
+    /* ==========================================
+       2. HEADER & BRANDING
+       ========================================== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      padding: 1.2rem 2.2rem;
+      border-radius: var(--radius-md);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-pro);
+    }
+
+    .brand-group { display: flex; align-items: center; gap: 1rem; }
+    .brand-logo {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: #fff;
+      box-shadow: 0 0 25px var(--primary-glow);
+    }
+
+    .brand-title {
+      font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ==========================================
+       3. 3D PARALLAX HERO SECTION
+       ========================================== */
+    .parallax-hero-section {
+      margin-bottom: 3.5rem;
+      perspective: 1000px;
+    }
+
+    .parallax-card {
+      position: relative;
+      height: 420px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-pro);
+      display: flex;
+      align-items: center;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+    }
+
+    .parallax-bg {
+      position: absolute;
+      inset: -20px;
+      background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+      transform: translateZ(-30px) scale(1.15);
+      transition: transform 0.1s ease-out;
+      filter: brightness(0.65) contrast(1.1);
+    }
+
+    .parallax-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(5, 7, 15, 0.95) 15%, rgba(5, 7, 15, 0.4) 65%, transparent);
+    }
+
+    .parallax-content {
+      position: relative;
+      z-index: 5;
+      padding: 3.5rem;
+      max-width: 650px;
+      transform: translateZ(40px);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.25);
+      border: 1px solid var(--border-glow);
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-btn {
+      padding: 0.85rem 1.8rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 25px var(--primary-glow);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 35px var(--primary-glow);
+    }
+
+    /* ==========================================
+       4. FEATURED SPOTLIGHT CAROUSEL
+       ========================================== */
+    .carousel-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .section-title {
+      font-size: 1.3rem; font-weight: 800; margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+
+    .section-title i { color: var(--pink-accent); }
+
+    .carousel-container {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 360px;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-pro);
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .carousel-slide { min-width: 100%; position: relative; height: 100%; }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+
+    .slide-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(5, 7, 15, 0.9) 20%, rgba(5, 7, 15, 0.2) 70%, transparent);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 3rem; max-width: 600px;
+    }
+
+    .slide-badge {
+      align-self: flex-start;
+      background: linear-gradient(135deg, var(--pink-accent), var(--primary));
+      padding: 0.3rem 0.8rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .slide-title { font-size: 2rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.6rem; }
+    .slide-desc { color: var(--text-muted); font-size: 0.9rem; }
+
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(13, 18, 30, 0.85); border: 1px solid var(--border-light);
+      color: #fff; cursor: pointer; z-index: 10; backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-btn:hover { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+    .c-prev { left: 20px; } .c-next { right: 20px; }
+
+    /* ==========================================
+       5. CONTROLS, SEARCH & LAYOUT SWITCHER
+       ========================================== */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      background: var(--bg-surface);
+      padding: 1.1rem 1.8rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+    }
+
+    .search-wrapper { position: relative; flex: 1; max-width: 420px; }
+    .search-wrapper input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 3rem;
+      background: rgba(5, 7, 15, 0.7);
+      border: 1px solid var(--border-light);
+      border-radius: 9999px;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-wrapper input:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(6, 182, 212, 0.35); }
+    .search-wrapper i { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+    .filter-pills { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+    .pill-btn {
+      padding: 0.6rem 1.3rem; border-radius: 9999px;
+      border: 1px solid var(--border-light); background: transparent;
+      color: var(--text-muted); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+    }
+
+    .pill-btn:hover, .pill-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff; border-color: transparent;
+      box-shadow: 0 4px 18px var(--primary-glow);
+    }
+
+    .view-toggle { display: flex; gap: 0.5rem; background: rgba(5,7,15,0.6); padding: 0.3rem; border-radius: 12px; border: 1px solid var(--border-light); }
+    .view-btn {
+      padding: 0.5rem 0.8rem; border-radius: 8px; border: none; background: transparent;
+      color: var(--text-muted); cursor: pointer; transition: all 0.2s ease;
+    }
+    .view-btn.active { background: var(--primary); color: #fff; }
+
+    /* ==========================================
+       6. EXPANDED GALLERY GRID (HOVER DYNAMICS)
+       ========================================== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      transition: grid-template-columns 0.3s ease;
+    }
+
+    .gallery-grid.grid-compact {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+
+    .gallery-card {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gallery-card.hide { display: none; }
+
+    .gallery-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--accent);
+      box-shadow: 0 25px 35px -10px rgba(6, 182, 212, 0.35);
+    }
+
+    .gallery-card:hover img {
+      transform: scale(1.12);
+      filter: brightness(1.1);
+    }
+
+    .card-badge {
+      position: absolute; top: 15px; left: 15px;
+      background: rgba(5, 7, 15, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-light);
+      padding: 0.35rem 0.8rem; border-radius: 8px;
+      font-size: 0.75rem; font-weight: 700; color: var(--accent); z-index: 2;
+    }
+
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(5, 7, 15, 0.95) 0%, rgba(5, 7, 15, 0.4) 50%, transparent 100%);
+      opacity: 0; padding: 1.6rem;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-card:hover .card-overlay { opacity: 1; }
+
+    .card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .card-sub { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* ==========================================
+       7. ADVANCED STUDIO EDITOR LIGHTBOX
+       ========================================== */
+    .lightbox-modal {
+      position: fixed; inset: 0;
+      background: rgba(5, 7, 15, 0.95);
+      backdrop-filter: blur(25px);
+      z-index: 1000;
+      display: flex; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-modal.active { opacity: 1; pointer-events: auto; }
+
+    .lightbox-wrapper { display: flex; width: 100%; height: 100%; }
+
+    .lightbox-stage {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      position: relative; padding: 2.5rem;
+    }
+
+    .lightbox-stage img {
+      max-width: 90%; max-height: 82vh;
+      border-radius: var(--radius-md);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      transition: filter 0.2s ease;
+    }
+
+    .lightbox-panel {
+      width: 400px;
+      background: var(--glass-panel);
+      border-left: 1px solid var(--border-light);
+      padding: 2.2rem;
+      display: flex; flex-direction: column; gap: 1.4rem;
+      overflow-y: auto;
+    }
+
+    .close-studio {
+      position: absolute; top: 24px; right: 24px;
+      background: var(--bg-surface); border: 1px solid var(--border-light);
+      color: #fff; width: 44px; height: 44px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .close-studio:hover { background: var(--pink-accent); transform: scale(1.08); }
+
+    .filter-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .filter-group label { font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; font-weight: 600; }
+    .filter-group input { accent-color: var(--accent); }
+
+    @media(max-width: 960px) {
+      .lightbox-wrapper { flex-direction: column; }
+      .lightbox-panel { width: 100%; height: 380px; }
+      .parallax-content { padding: 2rem; }
+      .hero-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand-group">
+        <div class="brand-logo"><i class="fa-solid fa-cube"></i></div>
+        <div>
+          <h1 class="brand-title">Nexus Studio Pro</h1>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3D Parallax Banner -->
+    <section class="parallax-hero-section">
+      <div class="parallax-card" id="parallaxCard">
+        <div class="parallax-bg" id="parallaxBg"></div>
+        <div class="parallax-overlay"></div>
+        <div class="parallax-content" id="parallaxContent">
+          <span class="hero-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Next-Gen 3D Parallax View</span>
+          <h2 class="hero-title">Experience Depth & Visual Precision</h2>
+          <p class="hero-desc">Interactive high-resolution canvas suite crafted for visual developers, digital creators, and studio artists.</p>
+          <button class="hero-btn" onclick="document.getElementById('galleryGrid').scrollIntoView({behavior:'smooth'})">
+            Explore Collection <i class="fa-solid fa-arrow-down"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spotlight Carousel -->
+    <section class="carousel-section">
+      <h2 class="section-title"><i class="fa-solid fa-bolt"></i> Featured Spotlight Carousel</h2>
+
+      <div class="carousel-container">
+        <button class="carousel-btn c-prev" id="cPrev"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="carousel-btn c-next" id="cNext"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Slide 1 -->
+          <div class="carousel-slide">
+            <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1600&q=80" alt="Fluid Art">
+            <div class="slide-overlay">
+              <span class="slide-badge">Procedural Art</span>
+              <h2 class="slide-title">Hyper-Chromatic Fluid</h2>
+              <p class="slide-desc">Procedural color dynamics rendered in 8K resolution.</p>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="carousel-slide">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80" alt="Ocean">
+            <div class="slide-overlay">
+              <span class="slide-badge">Nature Series</span>
+              <h2 class="slide-title">Tropical Coastal Horizon</h2>
+              <p class="slide-desc">High dynamic range landscape capture with real-time editing capability.</p>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="carousel-slide">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80" alt="Setup">
+            <div class="slide-overlay">
+              <span class="slide-badge">Cyber Tech</span>
+              <h2 class="slide-title">Neon Cyberstation</h2>
+              <p class="slide-desc">Futuristic workstation aesthetics for modern creators.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Toolbar -->
+    <div class="controls-bar">
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search gallery by title or #tags...">
+      </div>
+
+      <div class="filter-pills">
+        <button class="pill-btn active" data-filter="all">All Assets</button>
+        <button class="pill-btn" data-filter="3d">3D & CGI</button>
+        <button class="pill-btn" data-filter="tech">Cyber/Tech</button>
+        <button class="pill-btn" data-filter="nature">Landscape</button>
+        <button class="pill-btn" data-filter="architecture">Architecture</button>
+      </div>
+
+      <div class="view-toggle">
+        <button class="view-btn active" id="viewDefault" title="Standard Grid"><i class="fa-solid fa-border-all"></i></button>
+        <button class="view-btn" id="viewCompact" title="Compact Grid"><i class="fa-solid fa-grid-2"></i></button>
+      </div>
+    </div>
+
+    <!-- Gallery Grid (12 High-Res Images) -->
+    <div class="gallery-grid" id="galleryGrid">
+      
+      <!-- Card 1 -->
+      <div class="gallery-card" data-category="3d" data-title="Neon Fluid Wave" data-tags="3d render neon fluid cgi">
+        <span class="card-badge">3D & CGI</span>
+        <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80" alt="Fluid">
+        <div class="card-overlay">
+          <h3 class="card-title">Neon Fluid Wave</h3>
+          <p class="card-sub">Procedural 3D Art</p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="gallery-card" data-category="architecture" data-title="Minimal Concrete Bridge" data-tags="architecture modern minimal bridge">
+        <span class="card-badge">Architecture</span>
+        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="Bridge">
+        <div class="card-overlay">
+          <h3 class="card-title">Minimal Concrete</h3>
+          <p class="card-sub">Geometric Architecture</p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="gallery-card" data-category="nature" data-title="Alpine Reflection Lake" data-tags="nature lake mountains alpine">
+        <span class="card-badge">Landscape</span>
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Lake">
+        <div class="card-overlay">
+          <h3 class="card-title">Alpine Lake</h3>
+          <p class="card-sub">High Mountain Horizon</p>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="gallery-card" data-category="tech" data-title="Cyberpunk Terminal" data-tags="tech cyberpunk workstation setup">
+        <span class="card-badge">Cyber/Tech</span>
+        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80" alt="Cyberpunk">
+        <div class="card-overlay">
+          <h3 class="card-title">Cyber Workstation</h3>
+          <p class="card-sub">Neon Coding Studio</p>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="gallery-card" data-category="3d" data-title="Prismatic Spheres" data-tags="3d render spheres glass abstract">
+        <span class="card-badge">3D & CGI</span>
+        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Glass Spheres">
+        <div class="card-overlay">
+          <h3 class="card-title">Prismatic Spheres</h3>
+          <p class="card-sub">Raytraced Glass Art</p>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="gallery-card" data-category="architecture" data-title="Futuristic Glass Tower" data-tags="architecture skyscraper modern city">
+        <span class="card-badge">Architecture</span>
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Skyscraper">
+        <div class="card-overlay">
+          <h3 class="card-title">Futuristic Glass Tower</h3>
+          <p class="card-sub">Metropolitan Design</p>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="gallery-card" data-category="nature" data-title="Misty Forest Path" data-tags="nature forest foggy mist">
+        <span class="card-badge">Landscape</span>
+        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80" alt="Forest">
+        <div class="card-overlay">
+          <h3 class="card-title">Misty Forest Path</h3>
+          <p class="card-sub">Deep Nature Atmosphere</p>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="gallery-card" data-category="tech" data-title="Minimalist Developer Desk" data-tags="tech workspace minimal developer">
+        <span class="card-badge">Cyber/Tech</span>
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" alt="Dev Setup">
+        <div class="card-overlay">
+          <h3 class="card-title">Developer Desk</h3>
+          <p class="card-sub">Clean Workspace</p>
+        </div>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="gallery-card" data-category="nature" data-title="Arctic Aurora Night" data-tags="nature aurora night arctic sky">
+        <span class="card-badge">Landscape</span>
+        <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=800&q=80" alt="Aurora">
+        <div class="card-overlay">
+          <h3 class="card-title">Arctic Aurora</h3>
+          <p class="card-sub">Celestial Phenomena</p>
+        </div>
+      </div>
+
+      <!-- Card 10 -->
+      <div class="gallery-card" data-category="3d" data-title="Quantum Mesh" data-tags="3d render grid abstract digital">
+        <span class="card-badge">3D & CGI</span>
+        <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=800&q=80" alt="Mesh">
+        <div class="card-overlay">
+          <h3 class="card-title">Quantum Mesh</h3>
+          <p class="card-sub">Cybernetic Structure</p>
+        </div>
+      </div>
+
+      <!-- Card 11 -->
+      <div class="gallery-card" data-category="architecture" data-title="Spiral Staircase Perspective" data-tags="architecture spiral staircase geometry">
+        <span class="card-badge">Architecture</span>
+        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="Staircase">
+        <div class="card-overlay">
+          <h3 class="card-title">Spiral Perspective</h3>
+          <p class="card-sub">Interior Geometry</p>
+        </div>
+      </div>
+
+      <!-- Card 12 -->
+      <div class="gallery-card" data-category="tech" data-title="Abstract Circuit Array" data-tags="tech hardware circuit glow">
+        <span class="card-badge">Cyber/Tech</span>
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" alt="Circuit">
+        <div class="card-overlay">
+          <h3 class="card-title">Circuit Array</h3>
+          <p class="card-sub">Hardware Design</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Studio Lightbox Editor Modal -->
+  <div class="lightbox-modal" id="lightbox">
+    <button class="close-studio" id="closeStudio"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lightbox-wrapper">
+      <div class="lightbox-stage">
+        <img id="studioImg" src="" alt="Enlarged Studio View">
+      </div>
+      <div class="lightbox-panel">
+        <h3 id="studioTitle" style="font-size:1.3rem;">Asset Controls</h3>
+        <p style="font-size:0.8rem; color:var(--text-muted);">Real-time Studio Adjustments</p>
+
+        <div class="filter-group" style="margin-top:0.8rem;">
+          <label>Brightness <span id="valB">100%</span></label>
+          <input type="range" id="rangeB" min="50" max="150" value="100">
+        </div>
+
+        <div class="filter-group">
+          <label>Contrast <span id="valC">100%</span></label>
+          <input type="range" id="rangeC" min="50" max="150" value="100">
+        </div>
+
+        <div class="filter-group">
+          <label>Saturation <span id="valS">100%</span></label>
+          <input type="range" id="rangeS" min="0" max="200" value="100">
+        </div>
+
+        <div class="filter-group">
+          <label>Sepia Tone <span id="valSepia">0%</span></label>
+          <input type="range" id="rangeSepia" min="0" max="100" value="0">
+        </div>
+
+        <div class="filter-group">
+          <label>Hue Shift <span id="valHue">0°</span></label>
+          <input type="range" id="rangeHue" min="0" max="360" value="0">
+        </div>
+
+        <button id="downloadAsset" style="margin-top:auto; padding:0.85rem; background:linear-gradient(135deg, var(--primary), var(--accent)); border:none; border-radius:12px; color:#fff; font-weight:700; cursor:pointer;">
+          <i class="fa-solid fa-download"></i> Export High-Res Image
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. 3D PARALLAX MOUSE EFFECT
+      const parallaxCard = document.getElementById('parallaxCard');
+      const parallaxBg = document.getElementById('parallaxBg');
+      const parallaxContent = document.getElementById('parallaxContent');
+
+      parallaxCard.addEventListener('mousemove', (e) => {
+        const rect = parallaxCard.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        const rotateX = (y / rect.height) * -12;
+        const rotateY = (x / rect.width) * 12;
+
+        parallaxCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        parallaxBg.style.transform = `translateZ(-30px) scale(1.15) translate(${x * 0.03}px, ${y * 0.03}px)`;
+        parallaxContent.style.transform = `translateZ(40px) translate(${x * -0.02}px, ${y * -0.02}px)`;
+      });
+
+      parallaxCard.addEventListener('mouseleave', () => {
+        parallaxCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        parallaxBg.style.transform = 'translateZ(-30px) scale(1.15) translate(0px, 0px)';
+        parallaxContent.style.transform = 'translateZ(40px) translate(0px, 0px)';
+      });
+
+      // 2. SPOTLIGHT CAROUSEL
+      const track = document.getElementById('carouselTrack');
+      const slides = Array.from(track.children);
+      const nextBtn = document.getElementById('cNext');
+      const prevBtn = document.getElementById('cPrev');
+      let slideIndex = 0;
+
+      function updateCarousel() {
+        track.style.transform = `translateX(-${slideIndex * 100}%)`;
+      }
+
+      nextBtn.addEventListener('click', () => {
+        slideIndex = (slideIndex + 1) % slides.length;
+        updateCarousel();
+      });
+
+      prevBtn.addEventListener('click', () => {
+        slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+        updateCarousel();
+      });
+
+      setInterval(() => {
+        slideIndex = (slideIndex + 1) % slides.length;
+        updateCarousel();
+      }, 5000);
+
+      // 3. FILTER & SEARCH ENGINE
+      const cards = document.querySelectorAll('.gallery-card');
+      const pills = document.querySelectorAll('.pill-btn');
+      const searchInput = document.getElementById('searchInput');
+
+      function filterGallery() {
+        const query = searchInput.value.toLowerCase().trim();
+        const activeFilter = document.querySelector('.pill-btn.active').dataset.filter;
+
+        cards.forEach(card => {
+          const category = card.dataset.category;
+          const tags = card.dataset.tags.toLowerCase();
+          const title = card.dataset.title.toLowerCase();
+
+          const matchesCat = (activeFilter === 'all' || category === activeFilter);
+          const matchesSearch = title.includes(query) || tags.includes(query);
+
+          if (matchesCat && matchesSearch) {
+            card.classList.remove('hide');
+          } else {
+            card.classList.add('hide');
+          }
+        });
+      }
+
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          filterGallery();
+        });
+      });
+
+      searchInput.addEventListener('input', filterGallery);
+
+      // 4. LAYOUT SWITCHER
+      const galleryGrid = document.getElementById('galleryGrid');
+      const viewDefault = document.getElementById('viewDefault');
+      const viewCompact = document.getElementById('viewCompact');
+
+      viewDefault.addEventListener('click', () => {
+        viewDefault.classList.add('active');
+        viewCompact.classList.remove('active');
+        galleryGrid.classList.remove('grid-compact');
+      });
+
+      viewCompact.addEventListener('click', () => {
+        viewCompact.classList.add('active');
+        viewDefault.classList.remove('active');
+        galleryGrid.classList.add('grid-compact');
+      });
+
+      // 5. STUDIO LIGHTBOX & ADVANCED LIVE FILTERS
+      const lightbox = document.getElementById('lightbox');
+      const studioImg = document.getElementById('studioImg');
+      const studioTitle = document.getElementById('studioTitle');
+      const closeStudio = document.getElementById('closeStudio');
+
+      const rangeB = document.getElementById('rangeB');
+      const rangeC = document.getElementById('rangeC');
+      const rangeS = document.getElementById('rangeS');
+      const rangeSepia = document.getElementById('rangeSepia');
+      const rangeHue = document.getElementById('rangeHue');
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          const img = card.querySelector('img');
+          studioImg.src = img.src;
+          studioTitle.textContent = card.dataset.title;
+          lightbox.classList.add('active');
+        });
+      });
+
+      closeStudio.addEventListener('click', () => lightbox.classList.remove('active'));
+
+      function applyStudioFilters() {
+        const b = rangeB.value;
+        const c = rangeC.value;
+        const s = rangeS.value;
+        const sepia = rangeSepia.value;
+        const hue = rangeHue.value;
+
+        document.getElementById('valB').textContent = `${b}%`;
+        document.getElementById('valC').textContent = `${c}%`;
+        document.getElementById('valS').textContent = `${s}%`;
+        document.getElementById('valSepia').textContent = `${sepia}%`;
+        document.getElementById('valHue').textContent = `${hue}°`;
+
+        studioImg.style.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%) sepia(${sepia}%) hue-rotate(${hue}deg)`;
+      }
+
+      [rangeB, rangeC, rangeS, rangeSepia, rangeHue].forEach(input => input.addEventListener('input', applyStudioFilters));
+    });
+  </script>
+</body>
+</html>
